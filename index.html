@@ -269,6 +269,16 @@
   .scale-num.accent-orange { color: var(--orange); }
   .scale-num.accent-gold   { color: var(--gold); }
   .scale-desc { font-size: 12px; font-weight: 300; color: var(--text-muted); line-height: 1.5; letter-spacing: 0.01em; }
+  .num-unit {
+    font-size: 0.38em;
+    font-weight: 400;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    margin-left: 4px;
+    opacity: 0.65;
+    vertical-align: middle;
+    font-family: var(--font-body);
+  }
 
   @media (max-width: 600px) {
     .scale-grid { grid-template-columns: 1fr; gap: 0; }
@@ -639,7 +649,7 @@
             <div class="inline-stat-label">Estimated CKD prevalence in Indian adults</div>
           </div>
           <div class="inline-stat">
-            <div class="inline-stat-num" id="cnt-inline-pop">18,00,00,000</div>
+            <div class="inline-stat-num"><span id="cnt-inline-pop">18</span><span class="num-unit">Crore</span></div>
             <div class="inline-stat-label">Indians living with CKD, most undiagnosed</div>
           </div>
         </div>
@@ -670,15 +680,15 @@
       <div>
         <span class="problem-tag">Pharma Research</span>
         <h2 class="problem-headline">Drugs approved on Western trials, prescribed to 140 crore Indians</h2>
-        <p class="problem-teaser">Pivotal clinical trials rarely include Indian patients. Drug effectiveness and safety signals in Indian populations remain largely unknown until a medicine has already been prescribed at scale. Real-world evidence from 1,10,00,000 patient records closes that gap.</p>
+        <p class="problem-teaser">Pivotal clinical trials rarely include Indian patients. Drug effectiveness and safety signals in Indian populations remain largely unknown until a medicine has already been prescribed at scale. Real-world evidence from 1.1 Crore patient records closes that gap.</p>
 
         <div class="inline-stats">
           <div class="inline-stat">
-            <div class="inline-stat-num" id="cnt-p02-records">1,10,00,000</div>
+            <div class="inline-stat-num"><span id="cnt-p02-records">1.1</span><span class="num-unit">Crore</span></div>
             <div class="inline-stat-label">Real-world patient records in the dataset</div>
           </div>
           <div class="inline-stat">
-            <div class="inline-stat-num" id="cnt-p02-pharma">18,000</div>
+            <div class="inline-stat-num"><span id="cnt-p02-pharma">18</span><span class="num-unit">Thousand</span></div>
             <div class="inline-stat-label">Pharmacies contributing prescription data</div>
           </div>
         </div>
@@ -716,7 +726,7 @@
             <div class="inline-stat-label">South Asians with CYP2C19 loss-of-function variants</div>
           </div>
           <div class="inline-stat">
-            <div class="inline-stat-num" id="cnt-p03-pop">42,00,00,000</div>
+            <div class="inline-stat-num"><span id="cnt-p03-pop">42</span><span class="num-unit">Crore</span></div>
             <div class="inline-stat-label">Indians with inadequate clopidogrel response</div>
           </div>
         </div>
@@ -761,14 +771,14 @@
           <span class="pillar-code">LAB</span>
           <div>
             <div class="pillar-title">Laboratory Diagnostics</div>
-            <div class="pillar-desc">1,10,00,000 test results from diagnostic centres across India, structured for longitudinal analysis</div>
+            <div class="pillar-desc">1.1 Crore test results from diagnostic centres across India, structured for longitudinal analysis</div>
           </div>
         </div>
         <div class="pillar">
           <span class="pillar-code">RX</span>
           <div>
             <div class="pillar-title">Pharmacy Records</div>
-            <div class="pillar-desc">Prescription and dispensing data from 18,000 pharmacies enabling drug utilisation and safety analysis</div>
+            <div class="pillar-desc">Prescription and dispensing data from 18 Thousand pharmacies enabling drug utilisation and safety analysis</div>
           </div>
         </div>
         <div class="pillar">
@@ -830,33 +840,35 @@
     });
   });
 
-  /* Indian number format: 1,23,45,678 */
+  /* Indian number format */
   function formatIndian(n) {
     var s = Math.floor(n).toString();
     if (s.length <= 3) return s;
-    var last3 = s.slice(-3);
-    var rest   = s.slice(0, -3);
-    var groups = [];
+    var last3 = s.slice(-3), rest = s.slice(0, -3), groups = [];
     while (rest.length > 2) { groups.unshift(rest.slice(-2)); rest = rest.slice(0, -2); }
     if (rest) groups.unshift(rest);
     return groups.join(',') + ',' + last3;
   }
 
+  /* Format a value by type */
+  function formatVal(n, fmt) {
+    if (fmt === 'pct')      return Math.floor(n) + '%';
+    if (fmt === 'crore')    { var c = n / 10000000; return (c < 10 ? c.toFixed(1) : Math.round(c).toString()); }
+    if (fmt === 'thousand') return Math.floor(n / 1000).toString();
+    if (fmt === 'indian')   return formatIndian(n);
+    return Math.floor(n).toString();
+  }
+
   /* Counting animation */
-  function animateCount(el, target, isPercent, duration) {
-    var start     = null;
-    var startVal  = 0;
+  function animateCount(el, target, fmt, duration) {
+    var start = null;
     function step(ts) {
       if (!start) start = ts;
       var progress = Math.min((ts - start) / duration, 1);
-      /* ease-out quad */
-      var eased  = 1 - (1 - progress) * (1 - progress);
-      var current = startVal + (target - startVal) * eased;
-      el.textContent = isPercent
-        ? Math.floor(current) + '%'
-        : formatIndian(current);
+      var eased = 1 - (1 - progress) * (1 - progress);
+      el.textContent = formatVal(target * eased, fmt);
       if (progress < 1) requestAnimationFrame(step);
-      else el.textContent = isPercent ? target + '%' : formatIndian(target);
+      else el.textContent = formatVal(target, fmt);
     }
     requestAnimationFrame(step);
   }
@@ -864,34 +876,30 @@
   /* Respect reduced-motion */
   var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* Register all countable elements */
   var counters = [
     /* scale strip */
-    { sel: '#cnt-lab',      target: 11000000,  pct: false },
-    { sel: '#cnt-pharmacy', target: 18000,      pct: false },
-    { sel: '#cnt-years',    target: 20,         pct: false },
+    { id: 'cnt-lab',          target: 11000000,  fmt: 'indian'   },
+    { id: 'cnt-pharmacy',     target: 18000,      fmt: 'indian'   },
+    { id: 'cnt-years',        target: 20,         fmt: 'num'      },
     /* problem 01 inline stats */
-    { sel: '#cnt-inline-pct', target: 17,        pct: true  },
-    { sel: '#cnt-inline-pop', target: 180000000, pct: false },
+    { id: 'cnt-inline-pct',   target: 17,         fmt: 'pct'      },
+    { id: 'cnt-inline-pop',   target: 180000000,  fmt: 'crore'    },
     /* problem 02 inline stats */
-    { sel: '#cnt-p02-records', target: 11000000, pct: false },
-    { sel: '#cnt-p02-pharma',  target: 18000,    pct: false },
+    { id: 'cnt-p02-records',  target: 11000000,   fmt: 'crore'    },
+    { id: 'cnt-p02-pharma',   target: 18000,      fmt: 'thousand' },
     /* problem 03 inline stats */
-    { sel: '#cnt-p03-cyp', target: 30,         pct: true  },
-    { sel: '#cnt-p03-pop', target: 420000000,  pct: false },
+    { id: 'cnt-p03-cyp',      target: 30,         fmt: 'pct'      },
+    { id: 'cnt-p03-pop',      target: 420000000,  fmt: 'crore'    },
   ];
 
   var DURATION = prefersReduced ? 0 : 800;
 
   window.addEventListener('DOMContentLoaded', function() {
     counters.forEach(function(c) {
-      var el = document.getElementById(c.sel.replace('#',''));
+      var el = document.getElementById(c.id);
       if (!el) return;
-      if (prefersReduced) {
-        el.textContent = c.pct ? c.target + '%' : formatIndian(c.target);
-      } else {
-        animateCount(el, c.target, c.pct, DURATION);
-      }
+      el.textContent = formatVal(prefersReduced ? c.target : 0, c.fmt);
+      if (!prefersReduced) animateCount(el, c.target, c.fmt, DURATION);
     });
   });
 </script>
