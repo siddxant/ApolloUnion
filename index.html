@@ -1,1 +1,1015 @@
-testing
+<title>Apollo Union</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@300;400&display=swap">
+
+<style>
+  :root {
+    --bg:             #0B0A09;
+    --surface:        #141210;
+    --surface-2:      #1C1916;
+    --text:           #EDE9E3;
+    --text-muted:     #7D7568;
+    --text-dim:       #48433D;
+    --border:         #222018;
+    --border-mid:     #342F28;
+
+    --cyan:           #2DB3AE;
+    --cyan-soft:      rgba(45,179,174,0.10);
+    --cyan-border:    rgba(45,179,174,0.22);
+
+    --green:          #2C6A4F;
+    --green-light:    #4C9970;
+    --green-soft:     rgba(76,153,112,0.12);
+    --green-border:   rgba(76,153,112,0.25);
+
+    --burgundy:       #7A2840;
+    --burgundy-soft:  rgba(122,40,64,0.16);
+    --burgundy-border:rgba(122,40,64,0.32);
+
+    --gold:           #C4991A;
+    --gold-soft:      rgba(196,153,26,0.12);
+    --gold-border:    rgba(196,153,26,0.28);
+
+    --font-display:   'Cormorant Garamond', 'Georgia', 'Times New Roman', serif;
+    --font-body:      'DM Sans', system-ui, sans-serif;
+    --font-mono:      'DM Mono', 'Courier New', monospace;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background: var(--bg);
+  }
+
+  a:focus-visible {
+    outline: 1px solid var(--cyan);
+    outline-offset: 3px;
+  }
+
+  /* ---- CONTAINER ---- */
+  .wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-inline: 48px;
+  }
+
+  @media (max-width: 640px) {
+    .wrap { padding-inline: 20px; }
+  }
+
+  /* ---- NAV ---- */
+  nav {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 100;
+    background: rgba(11, 10, 9, 0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 21px;
+    letter-spacing: 0.03em;
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .logo-dot {
+    color: var(--cyan);
+  }
+
+  .nav-links {
+    list-style: none;
+    display: flex;
+    gap: 40px;
+  }
+
+  .nav-links a {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.18s;
+  }
+
+  .nav-links a:hover { color: var(--text); }
+
+  @media (max-width: 640px) {
+    .nav-inner { padding: 20px; }
+    .nav-links { gap: 24px; }
+    .nav-links li:nth-child(n+3) { display: none; }
+  }
+
+  /* ---- HERO ---- */
+  .hero {
+    padding: 96px 0 88px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .hero-eyebrow {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 28px;
+    height: 1px;
+    background: var(--cyan);
+  }
+
+  .hero-headline {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(48px, 5.5vw, 76px);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    margin-bottom: 32px;
+    text-wrap: balance;
+  }
+
+  .hero-headline em {
+    font-style: italic;
+    color: rgba(237,233,227,0.6);
+  }
+
+  .hero-body {
+    font-size: 17px;
+    font-weight: 300;
+    color: var(--text-muted);
+    line-height: 1.72;
+    max-width: 520px;
+    margin-bottom: 48px;
+  }
+
+  .cta-row {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    padding: 11px 28px;
+    background: var(--cyan);
+    color: #0B0A09;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: opacity 0.18s;
+  }
+
+  .btn-primary:hover { opacity: 0.82; }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    padding: 11px 28px;
+    background: transparent;
+    color: var(--text-muted);
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid var(--border-mid);
+    transition: color 0.18s, border-color 0.18s;
+  }
+
+  .btn-ghost:hover {
+    color: var(--text);
+    border-color: var(--text-dim);
+  }
+
+  /* ---- LAB READOUT ---- */
+  .lab-panel {
+    border: 1px solid var(--border-mid);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .lab-panel-top {
+    height: 2px;
+    background: linear-gradient(90deg, var(--cyan) 0%, transparent 100%);
+  }
+
+  .lab-panel-body {
+    padding: 28px 28px 24px;
+  }
+
+  .lab-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 22px;
+  }
+
+  .lab-panel-title {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .lab-badge {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    padding: 3px 9px;
+    background: var(--cyan-soft);
+    border: 1px solid var(--cyan-border);
+    color: var(--cyan);
+  }
+
+  .lab-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 10px;
+    align-items: center;
+    padding: 9px 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .lab-row:last-of-type {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .lab-name {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--text-muted);
+  }
+
+  .lab-val {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .lab-tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    padding: 2px 6px;
+    white-space: nowrap;
+  }
+
+  .tag-decline { color: #D96060; background: rgba(217,96,96,0.10); }
+  .tag-watch   { color: var(--gold); background: var(--gold-soft); }
+  .tag-ok      { color: var(--green-light); background: var(--green-soft); }
+
+  .lab-note {
+    margin-top: 18px;
+    font-size: 12px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 960px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+      gap: 48px;
+    }
+    .lab-panel { max-width: 480px; }
+  }
+
+  /* ---- SCALE STRIP ---- */
+  .scale-strip {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .scale-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    background: var(--border);
+    gap: 1px;
+  }
+
+  .scale-cell {
+    background: var(--bg);
+    padding: 40px 48px;
+  }
+
+  .scale-num {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: 56px;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 10px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .scale-num sup {
+    font-size: 0.45em;
+    color: var(--cyan);
+    font-variant-numeric: normal;
+    vertical-align: super;
+    margin-left: 2px;
+  }
+
+  .scale-desc {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--text-muted);
+    line-height: 1.5;
+    max-width: 200px;
+  }
+
+  @media (max-width: 640px) {
+    .scale-grid { grid-template-columns: 1fr; }
+    .scale-cell { padding: 28px 20px; }
+    .scale-num { font-size: 44px; }
+    .scale-desc { max-width: 100%; }
+  }
+
+  /* ---- FLAGSHIP ---- */
+  .flagship {
+    padding: 100px 0;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+
+  .flagship-accent-bar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--burgundy);
+  }
+
+  .flagship-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 32px;
+  }
+
+  .flagship-tag::before {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  .flagship-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .flagship-headline {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(34px, 3.5vw, 50px);
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 24px;
+    text-wrap: balance;
+  }
+
+  .flagship-lead {
+    font-size: 17px;
+    font-weight: 300;
+    color: var(--text-muted);
+    line-height: 1.72;
+    margin-bottom: 28px;
+  }
+
+  .flagship-body {
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--text-muted);
+    line-height: 1.78;
+  }
+
+  .flagship-body p + p { margin-top: 16px; }
+
+  .flagship-stat-box {
+    padding: 32px;
+    border: 1px solid var(--burgundy-border);
+    background: var(--burgundy-soft);
+    margin-bottom: 28px;
+  }
+
+  .flagship-stat-num {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: 64px;
+    line-height: 1;
+    color: var(--gold);
+    margin-bottom: 10px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .flagship-stat-label {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  .flagship-points {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .flagship-point {
+    display: flex;
+    gap: 18px;
+    align-items: start;
+    padding: 18px 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .flagship-point:last-child {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .point-marker {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--gold);
+    margin-top: 8px;
+    flex-shrink: 0;
+  }
+
+  .point-text {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--text-muted);
+    line-height: 1.65;
+  }
+
+  @media (max-width: 900px) {
+    .flagship-grid { grid-template-columns: 1fr; gap: 48px; }
+    .flagship-accent-bar { display: none; }
+  }
+
+  /* ---- PROGRAMS ---- */
+  .programs {
+    padding: 100px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-tag {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 14px;
+  }
+
+  .section-headline {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(30px, 3.5vw, 44px);
+    line-height: 1.1;
+    color: var(--text);
+    text-wrap: balance;
+    margin-bottom: 60px;
+  }
+
+  .programs-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--border);
+  }
+
+  .prog-card {
+    background: var(--bg);
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .prog-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+  }
+
+  .prog-card.c-cyan::before   { background: var(--cyan); }
+  .prog-card.c-green::before  { background: var(--green-light); }
+  .prog-card.c-gold::before   { background: var(--gold); }
+  .prog-card.c-burg::before   { background: var(--burgundy); }
+
+  .prog-area {
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 14px;
+  }
+
+  .prog-title {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 25px;
+    line-height: 1.2;
+    color: var(--text);
+    margin-bottom: 14px;
+    text-wrap: balance;
+  }
+
+  .prog-body {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--text-muted);
+    line-height: 1.72;
+  }
+
+  .prog-pill {
+    display: inline-block;
+    margin-top: 24px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    padding: 3px 9px;
+    border: 1px solid var(--border-mid);
+    color: var(--text-dim);
+    letter-spacing: 0.06em;
+  }
+
+  .prog-card.c-cyan  .prog-pill { border-color: var(--cyan-border);  color: var(--cyan); }
+  .prog-card.c-green .prog-pill { border-color: var(--green-border); color: var(--green-light); }
+  .prog-card.c-gold  .prog-pill { border-color: var(--gold-border);  color: var(--gold); }
+  .prog-card.c-burg  .prog-pill { border-color: var(--burgundy-border); color: var(--burgundy); }
+
+  @media (max-width: 700px) {
+    .programs-grid { grid-template-columns: 1fr; }
+    .prog-card { padding: 32px 0; background: var(--bg); }
+  }
+
+  /* ---- FOUNDATION ---- */
+  .foundation {
+    padding: 100px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .foundation-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .foundation-body {
+    font-size: 17px;
+    font-weight: 300;
+    color: var(--text-muted);
+    line-height: 1.75;
+  }
+
+  .foundation-body p + p { margin-top: 20px; }
+
+  .pillars {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pillar {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 20px;
+    padding: 22px 0;
+    border-top: 1px solid var(--border);
+    align-items: start;
+  }
+
+  .pillar:last-child { border-bottom: 1px solid var(--border); }
+
+  .pillar-code {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--cyan);
+    letter-spacing: 0.04em;
+    padding-top: 2px;
+  }
+
+  .pillar-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .pillar-desc {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--text-muted);
+    line-height: 1.55;
+  }
+
+  @media (max-width: 900px) {
+    .foundation-grid { grid-template-columns: 1fr; gap: 48px; }
+  }
+
+  /* ---- CONTACT ---- */
+  .contact {
+    padding: 100px 0;
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+  }
+
+  .contact-headline {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(34px, 4.5vw, 58px);
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 20px;
+    text-wrap: balance;
+  }
+
+  .contact-sub {
+    font-size: 16px;
+    font-weight: 300;
+    color: var(--text-muted);
+    line-height: 1.7;
+    max-width: 460px;
+    margin: 0 auto 44px;
+  }
+
+  /* ---- FOOTER ---- */
+  footer {
+    padding: 48px 0 40px;
+  }
+
+  .footer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 28px;
+  }
+
+  .footer-logo {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 20px;
+    color: var(--text-muted);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+  }
+
+  .footer-logo .logo-dot { color: var(--cyan); }
+
+  .footer-nav {
+    list-style: none;
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+
+  .footer-nav a {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color 0.18s;
+  }
+
+  .footer-nav a:hover { color: var(--text-muted); }
+
+  .footer-note {
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 640px) {
+    .footer-top { flex-direction: column; align-items: start; }
+  }
+</style>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="logo">Apollo<span class="logo-dot">.</span>Union</a>
+    <ul class="nav-links">
+      <li><a href="#flagship">Research</a></li>
+      <li><a href="#programs">Programs</a></li>
+      <li><a href="#foundation">Data</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <p class="hero-eyebrow">Clinical Intelligence</p>
+        <h1 class="hero-headline">Medical knowledge,<br><em>built for India</em>.</h1>
+        <p class="hero-body">Apollo Union applies machine learning to longitudinal laboratory results and pharmacy records from across India. The goal is to produce research and clinical tools calibrated for the Indian patient population, not adapted from Western cohorts.</p>
+        <div class="cta-row">
+          <a href="#programs" class="btn-primary">Research Programs</a>
+          <a href="#contact" class="btn-ghost">Partner with us</a>
+        </div>
+      </div>
+      <div>
+        <div class="lab-panel">
+          <div class="lab-panel-top"></div>
+          <div class="lab-panel-body">
+            <div class="lab-panel-header">
+              <span class="lab-panel-title">Patient Profile / Longitudinal</span>
+              <span class="lab-badge">CKD Watch</span>
+            </div>
+            <div class="lab-row">
+              <span class="lab-name">eGFR</span>
+              <span class="lab-val">54 mL/min</span>
+              <span class="lab-tag tag-decline">-12% / 18mo</span>
+            </div>
+            <div class="lab-row">
+              <span class="lab-name">Creatinine</span>
+              <span class="lab-val">1.42 mg/dL</span>
+              <span class="lab-tag tag-decline">Trending up</span>
+            </div>
+            <div class="lab-row">
+              <span class="lab-name">HbA1c</span>
+              <span class="lab-val">6.4%</span>
+              <span class="lab-tag tag-watch">Borderline</span>
+            </div>
+            <div class="lab-row">
+              <span class="lab-name">Blood Pressure</span>
+              <span class="lab-val">138 / 88</span>
+              <span class="lab-tag tag-watch">Stage 1</span>
+            </div>
+            <div class="lab-row">
+              <span class="lab-name">Urine Albumin</span>
+              <span class="lab-val">48 mg/g</span>
+              <span class="lab-tag tag-ok">Within range</span>
+            </div>
+            <p class="lab-note">Flagged for early intervention. Predicted CKD stage progression in 24 to 36 months without management. Western reference intervals classify this patient as borderline normal.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCALE STRIP -->
+<section class="scale-strip">
+  <div class="scale-grid">
+    <div class="scale-cell wrap" style="max-width:none; padding-block: 40px;">
+      <div class="scale-num">Millions<sup>+</sup></div>
+      <div class="scale-desc">Laboratory diagnostic records indexed across partner centres in India</div>
+    </div>
+    <div class="scale-cell wrap" style="max-width:none; padding-block: 40px;">
+      <div class="scale-num">Thousands<sup>+</sup></div>
+      <div class="scale-desc">Diagnostic labs and pharmacies contributing longitudinal records</div>
+    </div>
+    <div class="scale-cell wrap" style="max-width:none; padding-block: 40px;">
+      <div class="scale-num">Decade<sup>+</sup></div>
+      <div class="scale-desc">Longitudinal depth across patient records, enabling multi-year trend modelling</div>
+    </div>
+  </div>
+</section>
+
+<!-- FLAGSHIP -->
+<section class="flagship" id="flagship">
+  <div class="flagship-accent-bar"></div>
+  <div class="wrap">
+    <div class="flagship-tag">Flagship Research Program</div>
+    <div class="flagship-grid">
+      <div>
+        <h2 class="flagship-headline">Detecting disease years before it appears</h2>
+        <p class="flagship-lead">Standard risk models were built on Western populations. South Asians are systematically misclassified, and the consequences are clinical.</p>
+        <div class="flagship-body">
+          <p>South Asians develop type 2 diabetes at lower body weight, cardiac disease nearly a decade earlier than European counterparts, and chronic kidney disease with almost no prior warning. The Framingham and QRISK models that most clinicians rely on were not calibrated for this population.</p>
+          <p>Apollo Union builds early-detection models using longitudinal laboratory data that captures physiological change over years, not a single cross-sectional reading. The result is a picture of where a patient is going, not only where they stand today.</p>
+        </div>
+      </div>
+      <div>
+        <div class="flagship-stat-box">
+          <div class="flagship-stat-num">17%</div>
+          <div class="flagship-stat-label">Estimated prevalence of chronic kidney disease among Indian adults. The majority remain undiagnosed until late stages, when intervention is far less effective.</div>
+        </div>
+        <ul class="flagship-points">
+          <li class="flagship-point">
+            <div class="point-marker"></div>
+            <span class="point-text">Creatinine and eGFR measurements tracked over time reveal kidney function decline years before clinical symptoms appear</span>
+          </li>
+          <li class="flagship-point">
+            <div class="point-marker"></div>
+            <span class="point-text">Models are trained and validated on Indian longitudinal data, not translated from Western cohorts</span>
+          </li>
+          <li class="flagship-point">
+            <div class="point-marker"></div>
+            <span class="point-text">Results are publishable in high-impact journals and deployable across Apollo's hospital network from the first release</span>
+          </li>
+          <li class="flagship-point">
+            <div class="point-marker"></div>
+            <span class="point-text">The same modelling framework extends directly to type 2 diabetes and non-alcoholic fatty liver disease</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRAMS -->
+<section class="programs" id="programs">
+  <div class="wrap">
+    <p class="section-tag">Research Programs</p>
+    <h2 class="section-headline">Six further lines of inquiry</h2>
+    <div class="programs-grid">
+
+      <div class="prog-card c-cyan">
+        <p class="prog-area">Diagnostics</p>
+        <h3 class="prog-title">Indian Reference Intervals</h3>
+        <p class="prog-body">Most laboratory normal ranges were derived from Western cohorts. A reference interval that misclassifies a healthy Indian as normal, or a sick Indian as borderline, undermines every diagnostic decision downstream. Deriving India-specific reference intervals from millions of laboratory results is a genuine scientific contribution that improves accuracy across every test type, carries low regulatory risk, and produces published results in months rather than years.</p>
+        <span class="prog-pill">Near-term / Publishable</span>
+      </div>
+
+      <div class="prog-card c-green">
+        <p class="prog-area">Pharmaceuticals</p>
+        <h3 class="prog-title">Real-World Evidence</h3>
+        <p class="prog-body">Clinical trials establish whether a drug works in a controlled population. They rarely show how it performs in Indian patients, who may respond differently due to genetics, diet, and comorbidity patterns. Apollo Union generates real-world evidence on drug effectiveness and safety signals from prescription and outcomes data across a large, demographically diverse population, giving pharmaceutical companies the evidence their submissions and commercial decisions require.</p>
+        <span class="prog-pill">Long-term / Core revenue</span>
+      </div>
+
+      <div class="prog-card c-gold">
+        <p class="prog-area">Global Health</p>
+        <h3 class="prog-title">Antimicrobial Resistance Mapping</h3>
+        <p class="prog-body">India carries a disproportionate share of the global burden of drug-resistant infections. Combining culture test results, antibiotic prescription records, and pharmacy sales at scale reveals where resistance is emerging and which prescribing patterns are driving it. This is research fundable by global health bodies, publishable in the journals that shape international policy, and directly actionable by regulators and public health agencies.</p>
+        <span class="prog-pill">High-profile / Fundable</span>
+      </div>
+
+      <div class="prog-card c-cyan">
+        <p class="prog-area">Clinical Operations</p>
+        <h3 class="prog-title">Trial Recruitment</h3>
+        <p class="prog-body">Finding eligible patients for a pharmaceutical trial typically takes months of chart review and site coordination. Structured clinical data makes it possible to identify eligible candidates in minutes. Pharmaceutical companies pay significantly for this capability, and the current state of manual recruitment is expensive enough that even a partial solution carries clear commercial value. This is a near-term product opportunity alongside the longer research programs.</p>
+        <span class="prog-pill">Commercial / Near-term</span>
+      </div>
+
+      <div class="prog-card c-green">
+        <p class="prog-area">Supply Chain</p>
+        <h3 class="prog-title">Pharmacy Demand Forecasting</h3>
+        <p class="prog-body">Regional medicine supply is poorly matched to demand, producing stockouts in some areas and waste in others. Laboratory trends, prescription patterns, and seasonal signals make demand forecasting tractable at the district level. This is a practical product with clear commercial buyers in the pharmaceutical distribution and hospital procurement sectors, and it becomes significantly more accurate as the underlying data grows.</p>
+        <span class="prog-pill">Operational / Commercial</span>
+      </div>
+
+      <div class="prog-card c-burg">
+        <p class="prog-area">Patient Safety</p>
+        <h3 class="prog-title">Prescribing Quality</h3>
+        <p class="prog-body">Dangerous drug interactions, inappropriate antibiotic choices, and polypharmacy in elderly patients represent a substantial and largely invisible burden across India. Flagging these patterns at the point of prescription requires no new data collection and is clinically meaningful from day one. It addresses a problem that regulators, hospitals, and insurers all have strong incentive to solve, which makes it easier to deploy than most clinical AI applications.</p>
+        <span class="prog-pill">Deployable / Clinical</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOUNDATION -->
+<section class="foundation" id="foundation">
+  <div class="wrap">
+    <div class="foundation-grid">
+      <div>
+        <p class="section-tag">The Data Foundation</p>
+        <h2 class="section-headline">Every product begins here</h2>
+        <div class="foundation-body">
+          <p>Each research program and commercial product rests on the same foundation: a structured, longitudinal view of Indian clinical data at a scale no other organisation has assembled.</p>
+          <p>The data already exists. It sits across thousands of diagnostic laboratories, pharmacies, and hospital systems, collected over years of routine clinical care. Apollo Union makes it legible, structured, and analytically useful for the first time at this scale.</p>
+          <p>What this enables is not generic machine learning applied to health data. It is population-specific medical knowledge, derived from the actual clinical experience of Indian patients.</p>
+        </div>
+      </div>
+      <div class="pillars">
+        <div class="pillar">
+          <span class="pillar-code">LAB</span>
+          <div>
+            <div class="pillar-title">Laboratory Diagnostics</div>
+            <div class="pillar-desc">Millions of test results from diagnostic centres across India, structured and indexed for longitudinal analysis</div>
+          </div>
+        </div>
+        <div class="pillar">
+          <span class="pillar-code">RX</span>
+          <div>
+            <div class="pillar-title">Pharmacy Records</div>
+            <div class="pillar-desc">Prescription and dispensing data from thousands of pharmacies, enabling drug utilisation and safety analysis</div>
+          </div>
+        </div>
+        <div class="pillar">
+          <span class="pillar-code">TIME</span>
+          <div>
+            <div class="pillar-title">Longitudinal Depth</div>
+            <div class="pillar-desc">Records that follow patients over years, supporting trend modelling that cross-sectional data cannot provide</div>
+          </div>
+        </div>
+        <div class="pillar">
+          <span class="pillar-code">GEO</span>
+          <div>
+            <div class="pillar-title">Geographic Coverage</div>
+            <div class="pillar-desc">Data drawn from multiple states and city tiers, capturing the demographic diversity of the Indian population</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="wrap">
+    <h2 class="contact-headline">Research and partnership inquiries</h2>
+    <p class="contact-sub">Apollo Union works with pharmaceutical companies, research institutions, and hospital systems. If your organisation has a clinical question this data can answer, we want to hear from you.</p>
+    <div class="cta-row" style="justify-content: center;">
+      <a href="mailto:contact@apollo-union.com" class="btn-primary">Get in touch</a>
+      <a href="#programs" class="btn-ghost">View programs</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <a href="#" class="footer-logo">Apollo<span class="logo-dot">.</span>Union</a>
+      <ul class="footer-nav">
+        <li><a href="#flagship">Research</a></li>
+        <li><a href="#programs">Programs</a></li>
+        <li><a href="#foundation">Data</a></li>
+        <li><a href="mailto:contact@apollo-union.com">contact@apollo-union.com</a></li>
+      </ul>
+    </div>
+    <p class="footer-note">Apollo Union is a research and data analytics organisation. We do not provide medical advice. All clinical applications of our research are deployed through licensed healthcare providers. &copy; 2026 Apollo Union.</p>
+  </div>
+</footer>
